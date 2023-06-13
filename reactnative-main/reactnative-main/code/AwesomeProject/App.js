@@ -9,6 +9,7 @@ const App = () => {
         <View style={{flex:1}}>
             <Text style={{textAlign:'center',fontSize:40}}>StackDemo</Text>
             <KeyPad/>
+            <DigitView/>
         </View>
 
     )
