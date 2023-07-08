@@ -14,6 +14,8 @@ const App = ({navigation}) => {
     const {appColor} = useAppColor();
     const {images,setImages} = useImages();
 
+    const textColor = (settings.darkMode ? appColor.darkText : appColor.lightText);
+
     const clearAll = async () => {
             try {
             await AsyncStorage.clear();
@@ -21,25 +23,31 @@ const App = ({navigation}) => {
             } catch(e) {
             console.log("error in clearData");
             console.dir(e);
-            // clear error
             }
     }
 
     return (
         <PageTemplate spacing='space-evenly'>
-            <StatusBar style="auto" />
-            <View style={{alignItems: 'center'}}>
-                <Text style = {{fontSize: (4*settings.layoutSize), color: (settings.darkMode ? 'white' : 'black')}}>
+            <StatusBar style="auto" barStyle={{color: textColor}} />
+            <View style={{
+                alignItems: 'center', 
+                margin: 10, 
+                borderWidth:3,
+                borderColor: textColor, 
+                paddingTop: 10, 
+                paddingBottom: 10
+            }}>
+                <Text style = {{fontSize: (4*settings.layoutSize), color: textColor, textAlign: 'center'}}>
                     Reset All Stored Data?
                 </Text>
 
                 <View style={{flex: 1}} />
 
-                <Text style = {{fontSize: (3*settings.layoutSize), color: (settings.darkMode ? 'white' : 'black')}}>
+                <Text style = {{fontSize: (3*settings.layoutSize), color: textColor, textAlign: 'center'}}>
                     This includes all uploads and settings
                 </Text>
 
-                <Text style = {{fontSize: (3*settings.layoutSize), color: (settings.darkMode ? 'white' : 'black')}}>
+                <Text style = {{fontSize: (3*settings.layoutSize), color: textColor, textAlign: 'center'}}>
                     Can not be undone
                 </Text>
             </View>
@@ -52,7 +60,7 @@ const App = ({navigation}) => {
                     padding: 10,
                     borderRadius: 50}}
                     onPress = {() => {
-                        setSettings({darkMode:false, layoutSize:10}), 
+                        setSettings({darkMode:false, layoutSize:7}), 
                         setImages([]),
                         clearAll(),
                         alert('Data cleared')

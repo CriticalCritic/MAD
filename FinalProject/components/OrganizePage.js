@@ -2,6 +2,7 @@ import React,{useEffect} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Brightness from 'expo-brightness';
 //import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useSettings } from './SettingsContext';
@@ -11,6 +12,7 @@ import { useImages } from './ImagesContext';
 import PageTemplate from './PageTemplate';
 import LineDesign from './LineDesign';
 import ImageViewer from './ImageViewer';
+import Caption from './Caption'
 
 const PlaceholderImage = require('../assets/adaptive-icon.png');
 
@@ -20,9 +22,18 @@ const App = ({navigation}) => {
   const {appColor} = useAppColor();
   const {images,setImages} = useImages();
 
-  const textColor = (settings.darkMode ? 'white' : 'black');
+  const textColor = (settings.darkMode ? appColor.darkText : appColor.lightText);
 
   useEffect(() => {getImagesData()},[]);
+  // blinds anyone not using darkmode by turning the screen brightness to maximum
+  useEffect(() => {
+    (async () => {
+      const { status } = await Brightness.requestPermissionsAsync();
+      if (status === 'granted') {
+        (settings.darkMode ? Brightness.setSystemBrightnessAsync(0.25) : Brightness.setSystemBrightnessAsync(1))
+      }
+      })();
+    }, []);
 
   const getImagesData = async () => {
     try {
@@ -45,7 +56,7 @@ const App = ({navigation}) => {
 
   return (
     <PageTemplate spacing='space-between'>
-      <StatusBar style="auto" />
+      <StatusBar style="auto" barStyle={{color: textColor}} />
       <LineDesign color={textColor}>
         <Text style = {{
           fontSize: (4*settings.layoutSize), 
@@ -66,13 +77,14 @@ const App = ({navigation}) => {
           textAlign: 'center',
       }}>
         Press 
-        <Text style = {{color:(settings.darkMode ? appColor.lightButtonBack : appColor.darkButtonBack), fontWeight:'bold'}}>
+        <Text style = {{color: appColor.highlight, fontWeight:'bold'}}>
           {" Upload "}
         </Text> 
         to start
       </Text> 
       :
       <FlatList 
+        style={{marginTop: 10, marginBottom: 10}}
         data={images}
         renderItem={({ item }) => (
           <View style={{
@@ -81,21 +93,16 @@ const App = ({navigation}) => {
             borderColor:textColor,
             borderWidth:3,
           }}>
-            <ImageViewer placeHolder={PlaceholderImage} selectedImage={item[0]} />
+            <TouchableOpacity
+              onPress={() => {navigation.navigate('Upload', {item: item, edit: true});}}
+            >
+              <ImageViewer placeHolder={PlaceholderImage} selectedImage={item.image} />
+            </TouchableOpacity>
 
-            {item[1] === null ? null :
-            <Text style={{
-              fontSize: (4*settings.layoutSize), 
-              color: textColor,
-              fontFamily: 'monospace',
-              margin: 10,
-            }}>
-              {item[1]}
-            </Text>
-            }
+            {item.text != null ? <Caption item={item} images={images} /> : null}
           </View>
         )}
-        keyExtractor={({ id },index) => index}
+        keyExtractor={item => item.image}
       />
       }
 
@@ -104,11 +111,13 @@ const App = ({navigation}) => {
           backgroundColor: (settings.darkMode ? appColor.darkButtonBack : appColor.lightButtonBack),
           padding: 10,
           borderRadius: 50,
+          marginRight: 15,
+          marginLeft: 15,
       }}
-          onPress = {() => (navigation.navigate('Upload'))}
+          onPress = {() => (navigation.navigate('Upload', {edit: false}))}
       >
           <Text style={{
-              color: (settings.darkMode ? 'white' : 'black'),
+              color: (textColor),
               fontSize: (3*settings.layoutSize),
           }}>
               Upload

@@ -25,7 +25,7 @@ const App = () => {
       } else {          
         // this happens the first time the app is loaded
         console.log('read null value from Storage for Settings');
-        setSettings({darkMode:false, layoutSize:10});
+        setSettings({darkMode:false, layoutSize:7});
       };
       } catch(e) {
         console.log("error in getData");
@@ -46,7 +46,12 @@ const App = () => {
         darkButtonBack: '#004f22',
 
         lightTab: 'gray',
-        darkTab: 'white'
+        darkTab: 'lightgray',
+
+        lightText: 'black', 
+        darkText: 'lightgray',
+
+        highlight: 'green',
       }}>
         <ImagesContext.Provider 
             value={{images,setImages}}>

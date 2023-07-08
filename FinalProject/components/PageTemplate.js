@@ -10,20 +10,14 @@ const PageTemplate = ({spacing, children}) => {
     
     return (
         <SafeAreaView 
-        style={{
-            backgroundColor: (settings.darkMode ? appColor.darkBorder : appColor.lightBorder), 
-            flex:1
-        }}>
-            <View
                 style={{
                 flex: 1, 
                 justifyContent: spacing,
-                margin:20,
-                padding:20,
+                paddingTop: 30,
+                paddingBottom: 20,
                 backgroundColor: (settings.darkMode ? appColor.darkBack : appColor.lightBack),
             }} >
                 {children}
-            </View>
         </SafeAreaView>
     )
 }

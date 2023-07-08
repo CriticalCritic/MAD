@@ -8,14 +8,14 @@ import {useAppColor} from './AppColorContext';
 
 import PageTemplate from './PageTemplate';
 import LineDesign from './LineDesign';
+import LayoutSizeButton from './LayoutSizeButton';
 
 const App = ({navigation}) => {
     const {settings,setSettings} = useSettings();
     const {appColor} = useAppColor();
 
     const buttonColor = (settings.darkMode ? appColor.darkButtonBack : appColor.lightButtonBack);
-    const offColor = (settings.darkMode ? 'gray' : 'lightgray')
-    const textColor = (settings.darkMode ? 'white' : 'black');
+    const textColor = (settings.darkMode ? appColor.darkText : appColor.lightText);
 
     const storeData = async (value) => {
         try {
@@ -30,7 +30,7 @@ const App = ({navigation}) => {
 
     return (
         <PageTemplate spacing='space-between'>
-            <StatusBar style="auto" />
+            <StatusBar style="auto" barStyle={{color: textColor}} />
             <LineDesign color={textColor}>
                 <Text style = {{
                     fontSize: (4*settings.layoutSize), 
@@ -47,81 +47,25 @@ const App = ({navigation}) => {
                     fontSize: (3*settings.layoutSize), 
                     color: textColor,
                 }}>
-                    Change Display Size: {settings.layoutSize}
+                    Set Display Size: 
                 </Text> 
             </View>
             
-            <View style={{flexDirection: 'row'}} >
-                <View style={{flex: 1}} />
-                <View style={{flex: (settings.layoutSize/3), flexDirection: 'column'}} >
-                    <TouchableOpacity
-                        style={{
-                            alignItems: 'center',
-                            backgroundColor: (settings.layoutSize == 5 ? buttonColor : offColor),
-                            padding: 20,
-                            borderRadius: 50,
-                        }}
-                        onPress = {() => {setSettings({darkMode:settings.darkMode,layoutSize:5}); storeData({darkMode:settings.darkMode,layoutSize:5})}}
-                    >
-                        <Text style={{
-                            color: textColor,
-                            fontSize: (3*settings.layoutSize),
-                        }}>
-                            Small
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{flex: 1}} />
-                <View style={{flex: (settings.layoutSize/3), flexDirection: 'column'}} >
-                    <TouchableOpacity
-                        style={{
-                            alignItems: 'center',
-                            backgroundColor: (settings.layoutSize == 10 ? buttonColor : offColor),
-                            padding: 20,
-                            borderRadius: 50,
-                        }}
-                        onPress = {() => {setSettings({darkMode:settings.darkMode,layoutSize:10}); storeData({darkMode:settings.darkMode,layoutSize:10})}}
-                    >
-                        <Text style={{
-                            color: textColor,
-                            fontSize: (3*settings.layoutSize),
-                        }}>
-                            Medium
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{flex: 1}} />
-                <View style={{flex: (settings.layoutSize/3), flexDirection: 'column'}} >
-                    <TouchableOpacity
-                        style={{
-                            alignItems: 'center',
-                            backgroundColor: (settings.layoutSize == 15 ? buttonColor : offColor),
-                            padding: 20,
-                            borderRadius: 50,
-                        }}
-                        onPress = {() => {setSettings({darkMode:settings.darkMode,layoutSize:15}); storeData({darkMode:settings.darkMode,layoutSize:15})}}
-                    >
-                        <Text style={{
-                            color: textColor,
-                            fontSize: (3*settings.layoutSize),
-                        }}>
-                            Large
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{flex: 1}} />
+            <View>
+            <LayoutSizeButton size='Small' textColor={textColor} storeData={storeData} />
+            <LayoutSizeButton size='Medium' textColor={textColor} storeData={storeData} />
+            <LayoutSizeButton size='Large' textColor={textColor} storeData={storeData} />
             </View>
 
             <View style={{alignItems: 'center'}}>
-                <Text style = {{fontSize: (3*settings.layoutSize), color: (settings.darkMode ? 'white' : 'black')}}>
+                <Text style = {{fontSize: (3*settings.layoutSize), color: textColor}}>
                     Dark Mode: {settings.darkMode ? "On" : "Off"}
                 </Text>
             </View>
 
             <View style={{flexDirection: 'row'}}>
                 <View style={{flex: 2}} />
-                <View style={{flex: (settings.layoutSize/3), flexDirection: 'column'}}>
-                    <View style={{flex: 2}} />
+                <View style={{flex: (settings.layoutSize/3)}}>
                     <TouchableOpacity 
                         style={{
                             alignItems: 'center', 
@@ -138,7 +82,6 @@ const App = ({navigation}) => {
                             Switch
                         </Text>
                     </TouchableOpacity>
-                    <View style={{flex: 2}} />
                 </View>
                 <View style={{flex: 2}} />
             </View>

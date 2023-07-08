@@ -1,7 +1,6 @@
 import React,{useEffect} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Touchable, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import * as Brightness from 'expo-brightness';
 
 import { useSettings } from './SettingsContext';
 import { useAppColor}  from './AppColorContext';
@@ -13,25 +12,15 @@ const App = () => {
   const {settings} = useSettings();
   const {appColor} = useAppColor();
 
-  const textColor = (settings.darkMode ? 'white' : 'black');
-
-  // blinds anyone not using darkmode by turning the screen brightness to maximum
-  useEffect(() => {
-    (async () => {
-      const { status } = await Brightness.requestPermissionsAsync();
-      if (status === 'granted') {
-        (settings.darkMode ? Brightness.setSystemBrightnessAsync(0.25) : Brightness.setSystemBrightnessAsync(1))
-      }
-      })();
-    }, []);
+  const textColor = (settings.darkMode ? appColor.darkText : appColor.lightText);
     
     return (
       <PageTemplate spacing='space-between'>
-        <StatusBar style="auto" />
+        <StatusBar style="auto" barStyle={{color: textColor}} />
         <LineDesign color={textColor}>
           <Text style = {[
             styles.bigText, {
-              fontSize: (4*settings.layoutSize), 
+              fontSize: (30), 
               color: textColor,
             }]}>
               An Organization App
@@ -47,7 +36,7 @@ const App = () => {
         }}>
           <Text style = {[
             styles.text, {
-              fontSize: (4*settings.layoutSize), 
+              fontSize: (30), 
               color: textColor,
               margin: 15,
             }]}>
@@ -57,22 +46,23 @@ const App = () => {
 
           <Text style = {[
             styles.text, {
-              fontSize: (4*settings.layoutSize), 
+              fontSize: (30), 
               color: textColor,
               margin: 15,
             }]}> 
               Navigate to the {'\n'}
-              <Text style = {{color:(settings.darkMode ? appColor.lightButtonBack : appColor.darkButtonBack), fontWeight:'bold'}}>
+              <Text style = {{color: appColor.highlight, fontWeight:'bold'}}>
                 {" Organize "}
               </Text> 
               tab to begin uploading 
           </Text>
+
         </View>
 
         <LineDesign color={textColor}>
           <Text style = {[
             styles.bigText, {
-              fontSize: (4*settings.layoutSize), 
+              fontSize: (30), 
               color: textColor,
             }]}>
               By: Daniel Olevsky

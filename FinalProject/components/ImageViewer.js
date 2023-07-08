@@ -14,7 +14,7 @@ export default function ImageViewer({ placeHolder, selectedImage }) {
 const styles = StyleSheet.create({  
   image: {
     borderRadius: 18,
-    resizeMode: 'center',
+    resizeMode: 'cover',
     margin: 15,
   },
 });

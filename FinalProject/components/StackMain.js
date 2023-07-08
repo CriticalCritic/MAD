@@ -31,7 +31,7 @@ const MyStack = () => {
           } 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'green',
+        tabBarActiveTintColor: appColor.highlight,
         tabBarInactiveTintColor: (settings.darkMode ? appColor.darkTab : appColor.lightTab),
         headerShown: false,
         tabBarLabelStyle: { 
