@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Brightness from 'expo-brightness';
-//import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useSettings } from './SettingsContext';
 import { useAppColor } from './AppColorContext';
